@@ -1,0 +1,26 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -y python3.9 python3-pip python3-opencv
+
+WORKDIR /myapp
+COPY . .
+
+RUN pip install torch
+RUN pip install torchvision
+RUN pip install cython
+RUN pip install flask
+RUN pip install pillow
+
+# detectron2 pre-requisites
+RUN pip install -e .
+
+# yolov7 pre-requisites
+RUN pip install -qr yolov7_requirements.txt
+
+
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+
+ENTRYPOINT ["flask", "run"])
