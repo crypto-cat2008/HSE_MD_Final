@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Uploads</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="app">
+
+    <div class="form-section">
+
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+        <ol>
+          <li>Click "Choose File". Select an image from your computer and click 'Open'. The image file name will appear inside "Choose File" button.<br/><br/></li>
+          <li>Click "Upload" to upload and initiate the image processing. This may take up to 30 sec.<br/><br/></li>
+          <li>Results will appear in three columns: original image, Faster R-CNN prediction, YOLOv7 prediction.<br/><br/></li>
+          <li>Click on the original image or prediction image to see it in more details. The image will open in a separate tab.</li>
+        </ol>
+      </form>
+
+    </div>
+
+    <div class="images-section">
+
+      {% for image in images %}
+        <a href="{{ url_for('serve_image', filename=image) }}" target="_blank">
+          <img src="{{ url_for('serve_image', filename=image) }}" />
+          <div style="color:black">{{ image }}</div>
+        </a>
+
+
+        <a href="{{ url_for('serve_dt2', filename=image) }}" target="_blank">
+          <img src="{{ url_for('serve_dt2', filename=image) }}" />
+          {% if dt2_answers[image] == 'clean' %}
+            <div style="color:green"><b>{{ dt2_answers[image] }}</b></div>
+          {% else %}
+            <div style="color:red"><b>{{ dt2_answers[image] }}</b></div>
+          {% endif %}
+        </a>
+
+        <a href="{{ url_for('serve_yolo', filename=image) }}" target="_blank">
+          <img src="{{ url_for('serve_yolo', filename=image) }}" />
+          {% if yolo_answers[image] == 'clean' %}
+            <div style="color:green"><b>{{ yolo_answers[image] }}</b></div>
+          {% else %}
+            <div style="color:red"><b>{{ yolo_answers[image] }}</b></div>
+          {% endif %}
+        </a>
+
+      {% endfor %}
+
+    </div>
+
+  </div>
+</body>
+</html>
