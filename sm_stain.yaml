@@ -1,0 +1,10 @@
+train: ./train  # train images
+val: ./val  # val images
+test: ./test
+
+
+# Classes
+nc: 1
+
+names: ['stain']
+  
